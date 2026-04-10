@@ -1,9 +1,17 @@
 const express = require("express"); 
 const router = express.Router(); 
 const Animal = require("../models/Animal"); 
- 
+const verifyToken = require('./validate_token'); 
+
+//consultar todos los animales
+router.get("/animals", verifyToken, (req, res) => {
+    animalsSchema.find()
+        .then((data) => res.json(data))
+        .catch((error) => res.status(400).json({ mensage: error }));
+});
+
 // CREATE: Crear un nuevo animal 
-router.post("/", async (req, res) => { 
+router.post("/", verifyToken, async (req, res) => { 
   try { 
     const animal = new Animal(req.body);  // Crear una nueva instancia de Animal con los datos enviados 
     const savedAnimal = await animal.save();  // Guardar el animal en la base de datos 

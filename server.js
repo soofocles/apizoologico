@@ -1,14 +1,15 @@
 require("dotenv").config(); 
 const express = require("express"); 
 const mongoose = require("mongoose"); 
-const cors = require("cors"); 
+const cors = require("cors");
+const authRoutes = require("./routes/authentication");
  
 const app = express(); 
  
 // Middleware 
 app.use(cors());          // Permitir solicitudes CORS 
 app.use(express.json());  // Permitir recibir datos JSON en el cuerpo de la solicitud 
- 
+
 // Conectar a MongoDB 
 mongoose.connect(process.env.MONGO_URI) 
   .then(() => console.log("MongoDB conectado")) 
@@ -17,6 +18,8 @@ mongoose.connect(process.env.MONGO_URI)
 // Rutas 
 app.use("/api/animals", require("./routes/animalRoutes")); 
  
+app.use("/api", authRoutes); // Rutas de autenticación 
+
 // Ruta base 
 app.get("/", (req, res) => { 
   res.send("API funcionando 🚀"); 
